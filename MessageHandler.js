@@ -3,27 +3,15 @@ var events = require("events");
 var util = require('util');
 var Q = require("q");
 
-/**
- * Message Handler
- * @param {[type]} id             Message ID
- * @param {[type]} name           Message nickname
- * @param {[type]} defaultHandler Function which will be called every time
- *                                this message is received
- */
-var MESSAGE_ID_BYTES = 1;
 
 /**
  * MessageHandler Constructor
- * @param {Number}   id       ID Code of message
- * @param {String}   name     Nickname of handler
- * @param {Function} callback Function to be called every time this message
- *                            is received.
+ * @param {Object} info  Object including ID, name, length
  */
 function MessageHandler(info) {
     var id = info.id || 0;
     var name = info.name || "Unnamed Message"
     var length = info.length || 1;
-    var callback = info.callback || undefinedCallback;
 
     if(id < 0 || id > Math.pow(2,8*MESSAGE_ID_BYTES)) {
         throw new Error("Message #"+id+" \""+name+"\" does not fit inside of "+ 
@@ -53,94 +41,72 @@ MessageHandler.prototype.receive = function() {
     return deferred.promise;
   }
 }
+  
+module.exports = function(serialFile) {
+  var message_handlers = [];
+  var MESSAGE_ID_BYTES = 1;
 
-
-/**
- * Add handler generator
- *
- * Creates new handler and adds it to the list of handlers
- * @param {[type]} id      [description]
- * @param {[type]} name    [description]
- * @param {[type]} handler [description]
- */
-function addHandler(info) {
-    var handler = new MessageHandler(info);
-    message_handlers[handler.id] = handler;
-    return handler;
-}
-
-/**
- * Get Handler
- * @param  {Number}      id Handler ID
- * @return {MessageHandler} Handler for the ID
- */
-function getHandler(id) {
-    if(message_handlers.hasOwnProperty(id)) {
-        return message_handlers[id];
-    } else {
-        //throw Error("Handler #"+id+" doesn't exist.")
-        return undefined;
-    }
-}
-
-
-
-/**
- * Undefined Callback, throw error.
- * @param  {Object} data Message Data
- * @return {undefined} 
- */
-function undefinedCallback(handler, data) {
-    var oldDeferred = handler.pendingDeferred;
-    var error = new Error({message:"Callback undefined.", data:data});
-    handler.pendingDeferred = [];
-    for(var id in oldDeferred) {
-        oldDeferred[id].reject(error)
-    }
-
-    throw error;
-}
-function doNothingCallback(data) {}
-
-
-var variableLengthMessageParser = function() {
+  /**
+   * Variable length message parser
+   * @return {parser} Parses the messages to be dispatched 
+   */
   var data = new Buffer(0);
   var length = MESSAGE_ID_BYTES;
   var messageHandler = undefined;
+  var variableLengthMessageParser = function(emitter, buffer){
+      data = Buffer.concat([data, buffer]);
+      while (data.length >= length) {
+        var out = data.slice(0,length)
+        data = data.slice(length);
 
-  return function(emitter, buffer){
-    data = Buffer.concat([data, buffer]);
-    while (data.length >= length) {
-      var out = data.slice(0,length)
-      data = data.slice(length);
+        if(messageHandler === undefined) {
+          messageHandler = getHandler(out[0]);
+          if(messageHandler) {
+            length = messageHandler.length;
+            messageHandler.emit('data', out);
+          }
 
-      if(messageHandler === undefined) {
-        messageHandler = getHandler(out[0]);
-        if(messageHandler) {
-          length = messageHandler.length;
+        } else {
+          messageHandler.emit("message", out);
           messageHandler.emit('data', out);
+
+          length = MESSAGE_ID_BYTES;
+          messageHandler = undefined;
         }
-
-      } else {
-        messageHandler.emit("message", out);
-        messageHandler.emit('data', out);
-
-        length = MESSAGE_ID_BYTES;
-        messageHandler = undefined;
       }
-    }
-    emitter.emit('data', buffer);
+      emitter.emit('data', buffer);
 
-  };
+    };
+  /**
+   * Add handler generator
+   *
+   * Creates new handler and adds it to the list of handlers
+   * @param {[type]} id      [description]
+   * @param {[type]} name    [description]
+   * @param {[type]} handler [description]
+   */
+  var addHandler = function (info) {
+      var handler = new MessageHandler(info);
+      message_handlers[handler.id] = handler;
+      return handler;
+  }
+  /**
+   * Get Handler
+   * @param  {Number}      id Handler ID
+   * @return {MessageHandler} Handler for the ID
+   */
+  var getHandler = function(id) {
+      if(message_handlers.hasOwnProperty(id)) {
+          return message_handlers[id];
+      } else {
+          //throw Error("Handler #"+id+" doesn't exist.")
+          return undefined;
+      }
+  }
 
-};
-
-
-  
-module.exports = function(serialFile) {
   var serialPort = new serialport.SerialPort(serialFile, {
-  baudRate: 9600,
-  parser: variableLengthMessageParser()
+    baudRate: 9600,
+    parser: variableLengthMessageParser
   }, false); 
 
   /**
@@ -185,7 +151,6 @@ module.exports = function(serialFile) {
     MessageHandler    : MessageHandler,
     addHandler        : addHandler,
     getHandler        : getHandler,
-    doNothingCallback : doNothingCallback,
     open              : function(){return openPromise},
     serialPort        : serialPort,
     sendMessage       : sendMessage
