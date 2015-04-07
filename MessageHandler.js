@@ -1,7 +1,11 @@
+"use strict";
 var serialport = require("serialport");
 var events = require("events");
 var util = require('util');
 var Q = require("q");
+
+
+var MESSAGE_ID_BYTES = 1;
 
 
 /**
@@ -12,6 +16,7 @@ function MessageHandler(info) {
     var id = info.id || 0;
     var name = info.name || "Unnamed Message"
     var length = info.length || 1;
+
 
     if(id < 0 || id > Math.pow(2,8*MESSAGE_ID_BYTES)) {
         throw new Error("Message #"+id+" \""+name+"\" does not fit inside of "+ 
@@ -44,7 +49,6 @@ MessageHandler.prototype.receive = function() {
   
 module.exports = function(serialFile) {
   var message_handlers = [];
-  var MESSAGE_ID_BYTES = 1;
 
   /**
    * Variable length message parser
@@ -153,8 +157,7 @@ module.exports = function(serialFile) {
     getHandler        : getHandler,
     open              : function(){return openPromise},
     serialPort        : serialPort,
-    sendMessage       : sendMessage
+    sendMessage       : sendMessage,
+    write             : serialPort.write
   };
 }
-
-
