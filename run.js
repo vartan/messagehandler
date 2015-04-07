@@ -23,15 +23,20 @@ var testHandler2 = messageHandler.addHandler({
 }).on("message", logMessageHandler);
 
 var echo = function(data) {
-  if(data.toString()=="\r")
-    this.write("\r\n", function(){});
-  else 
-    this.write(data,function(){})
+  for(var i=0;i<data.length;i++) {
+    var char = data[i];
+    if(char==="\r".charCodeAt(0))
+      this.write("\r\n", function(){});
+    else if(char === 0x7f)
+      this.write("\b \b", function(){});
+    else 
+      this.write(String.fromCharCode(char),function(){})
+  }
 }
 
 messageHandler.serialPort.on("data", echo);
 Q.when(messageHandler.open())
-  .then(messageHandler.sendMessage("test"))
+  .then(messageHandler.sendMessage("test\r\n"))
   .then(function(messageLength){
     console.log("sent message which was "+messageLength+" characters long.");
   })
