@@ -1,6 +1,7 @@
 var serialport = require("serialport");
 var events = require("events");
 var util = require('util');
+var Q = require("q");
 
 /**
  * Message Handler
@@ -10,8 +11,6 @@ var util = require('util');
  *                                this message is received
  */
 var MESSAGE_ID_BYTES = 1;
-var message_handlers = [];
-var Q = require("q");
 
 /**
  * MessageHandler Constructor
@@ -47,7 +46,6 @@ MessageHandler.prototype.receive = function() {
     var deferred = Q.defer();
 
     that.once("message", function(data) {
-      console.log("received "+data)
       deferred.resolve(data);
     });
     //that.pendingDeferred.push(deferred);
