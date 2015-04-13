@@ -1,14 +1,11 @@
 # Table of Contents
-<!-- MarkdownTOC -->
 
-- MessageHandlers
-    - Installation
-    - Usage
-    - Contributing
-    - History
-    - License
-
-<!-- /MarkdownTOC -->
+- [MessageHandlers](#messagehandlers)
+    - [Installation](#installation)
+    - [Usage](#usage)
+    - [Contributing](#contributing)
+    - [History](#history)
+    - [License](#license)
 
 # MessageHandlers
 MessageHandler is a module that sits between node and a serial port in order to 
