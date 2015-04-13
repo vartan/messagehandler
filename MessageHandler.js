@@ -16,7 +16,6 @@ function MessageHandler(info) {
   var id = info.id || 0,
       name = info.name || "Unnamed Message",
       length = info.length || 1;
-
   events.EventEmitter.call(this);
 
 
@@ -41,8 +40,8 @@ MessageHandler.prototype.receive = function() {
   var that = this;
   return function () {
     var deferred = Q.defer();
-    that.once("message", function receiveQCallback(data) {
-      deferred.resolve(data);
+    that.once("message", function receiveQCallback(event) {
+      deferred.resolve(event);
     });
     return deferred.promise;
   };
@@ -99,7 +98,8 @@ module.exports = function(serialFile, serialSettings) {
         }
 
       } else {
-        messageHandler.emit("message", out);
+        messageHandler.emit("message", 
+          {data:out, messageHandler:messageHandler});
         messageHandler.emit("data", out);
 
         length = MESSAGE_ID_BYTES;
