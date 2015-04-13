@@ -14,26 +14,33 @@ var messageHandler = require("messagehandler")("/dev/tty.usbserial-FTE6C8SO");
 messageHandler.serialPort.on("data", function(){});
 var Q = require("q"); // (optional) for synchronous messages
 ```
-To add asynchronous handlers:
+To create message handlers:
 ```javascript
 // Add message with ID 0x61 (ASCII 'a'). 
 var testHandler = messageHandler.addHandler({
   id:       0x61,
   name:     "'a' handler", 
   length:   4, 
-}).on("message", function(event) {
-    console.log("Received message 'a' asynchronously with payload "+event.data);    
 });
 
 var testHandler2 = messageHandler.addHandler({
   id:       0x62,
   name:     "'b' handler", 
   length:   5, 
-}).on("message", function(event) {
-    console.log("Received message 'b' asynchronously with payload "+event.data);    
 });
 
 ```
+
+To perform asynchronous handling:
+```javascript
+testHandler1.on("message", function(event) {
+    console.log("Received message 'a' asynchronously with payload "+event.data);    
+});
+testHandler2.on("message", function(event) {
+    console.log("Received message 'b' asynchronously with payload "+event.data);    
+});
+```
+
 To perform synchronous handling:
 ```javascript
 Q.when(messageHandler.open())
@@ -50,7 +57,7 @@ Q.when(messageHandler.open())
 ```
 
 ### example.js
-Here is a larger example:
+Here is a larger example, with simultaneous asynchronous/synchronous handlers:
 ```javascript
 #!/usr/bin/env node
 "use strict";
