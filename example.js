@@ -4,7 +4,7 @@ var Q = require("q");
 
 // Open a new message handler
 var serialIdentifier = process.argv[2] || "/dev/tty.usbserial-A7027DGF";
-var messageHandler = require("./messagehandler.js")(serialIdentifier);
+var messageHandler = require("messagehandler")(serialIdentifier);
 
 // echo all received characters back to command line
 messageHandler.serialPort.on("data", echo(messageHandler.serialPort));
@@ -32,9 +32,12 @@ var testHandler3 = messageHandler.addHandler({
 
 // Add to message handler, if the payload is "xit", then send a newline, then
 // exit the program.
-testHandler3.on("message", function(data) {
-  if (data.toString() === "xit") {
-    sendNewLine().then(process.exit);
+testHandler3.on("message", function(event) {
+  if (event.data.toString() === "xit") {
+    Q.fcall(messageHandler.sendMessage("Exiting...\r\n"))
+    .delay(10)
+    .then(process.exit);
+
   }
 });
 
