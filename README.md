@@ -1,5 +1,6 @@
 # MessageHandler
-MessageHandler is a tool that sits between node and a serial port in order to asynchronously and synchronously respond to messages over UART
+MessageHandler is a module that sits between node and a serial port in order to 
+asynchronously and synchronously respond to messages over UART
 
 ## Installation
 Type the following into your commandline if you have `npm` installed
@@ -183,4 +184,5 @@ function ascii (char){
     0.0.1 - Added
 
 ## License
-[![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)](http://www.wtfpl.net/) Licensed by WTFPL
+[![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)
+](http://www.wtfpl.net/) Licensed by WTFPL
