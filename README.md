@@ -1,11 +1,11 @@
-- [MessageHandlers](#messagehandlers)
+- [MessageHandler](#messagehandler)
     - [Installation](#installation)
     - [Usage](#usage)
     - [Contributing](#contributing)
     - [History](#history)
     - [License](#license)
 
-# MessageHandlers
+# MessageHandler
 MessageHandler is a module that sits between node and a serial port in order to 
 asynchronously and synchronously respond to messages over UART
 
