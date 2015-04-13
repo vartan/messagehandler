@@ -39,7 +39,7 @@ To perform synchronous handling:
 Q.when(messageHandler.open())
 .then(testHandler.receive())
 .then(function(event) {
-    console.log("Received handler a asynchronously: "+event.data);
+    console.log("Received handler a synchronously: "+event.data);
 })
 .catch(function(error) {
     console.log("ERROR! "+error);
