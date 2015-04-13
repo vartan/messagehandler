@@ -1,5 +1,3 @@
-# Table of Contents
-
 - [MessageHandlers](#messagehandlers)
     - [Installation](#installation)
     - [Usage](#usage)
