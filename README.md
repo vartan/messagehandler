@@ -1,6 +1,7 @@
+# Table of Contents
 <!-- MarkdownTOC -->
 
-- MessageHandler
+- MessageHandlers
     - Installation
     - Usage
     - Contributing
@@ -9,7 +10,7 @@
 
 <!-- /MarkdownTOC -->
 
-# MessageHandler
+# MessageHandlers
 MessageHandler is a module that sits between node and a serial port in order to 
 asynchronously and synchronously respond to messages over UART
 
