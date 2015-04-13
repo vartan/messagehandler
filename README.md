@@ -1,6 +1,8 @@
 - [MessageHandler](#messagehandler)
     - [Installation](#installation)
     - [Usage](#usage)
+        - [example.js](#examplejs)
+            - [output](#example-output)
     - [Contributing](#contributing)
     - [History](#history)
     - [License](#license)
@@ -187,7 +189,7 @@ function ascii (char){
 }
 
 ```
-Output:
+####Example Output
 ![example.js output](https://raw.githubusercontent.com/vartan/messagehandler/master/example.js.png)
 ## Contributing
 
