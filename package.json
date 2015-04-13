@@ -1,16 +1,14 @@
 {
-  "name": "MessageHandler",
+  "name": "messagehandler",
   "version": "0.0.1",
   "description": "Handles variable length messages over UART",
-  "main": "MessageHandler.js",
+  "main": "messagehandler.js",
   "dependencies": {
     "q": "^1.2.0",
     "serialport": "^1.6.3"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+  "scripts": {},
+  "author": "vartan",
+  "license": "WTFPL"
 }
