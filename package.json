@@ -1,8 +1,8 @@
 {
-  "name": "messagehandler",
+  "name": "serialmessages",
   "version": "0.0.1",
   "description": "Handles variable length messages over UART",
-  "main": "messagehandler.js",
+  "main": "serialmessages.js",
   "dependencies": {
     "q": "^1.2.0",
     "serialport": "^1.6.3"

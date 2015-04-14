@@ -7,19 +7,19 @@
     - [History](#history)
     - [License](#license)
 
-# MessageHandler
-MessageHandler is a module that sits between node and a serial port in order to 
+# SerialMessages
+SerialMessages is a module that sits between node and a serial port in order to 
 asynchronously and synchronously respond to messages over UART
 
 ## Installation
 Type the following into your commandline if you have `npm` installed
 
-    npm install messagehandler
+    npm install serialmessages
 
 ## Usage
-This is how you instantiate up the messageHandler
+This is how you instantiate up the serial message handler
 ```javascript
-var messageHandler = require("messagehandler")("/dev/tty.usbserial-FTE6C8SO");
+var messageHandler = require("serialmessages")("/dev/tty.usbserial-FTE6C8SO");
 messageHandler.serialPort.on("data", function(){});
 var Q = require("q"); // (optional) for synchronous messages
 ```
@@ -73,7 +73,7 @@ var Q = require("q");
 
 // Open a new message handler
 var serialIdentifier = process.argv[2] || "/dev/tty.usbserial-A7027DGF";
-var messageHandler = require("./messagehandler.js")(serialIdentifier);
+var messageHandler = require("serialmessages")(serialIdentifier);
 
 // echo all received characters back to command line
 messageHandler.serialPort.on("data", echo(messageHandler.serialPort));
@@ -190,7 +190,7 @@ function ascii (char){
 
 ```
 ####Example Output
-![example.js output](https://raw.githubusercontent.com/vartan/messagehandler/master/example.js.png)
+![example.js output](https://raw.githubusercontent.com/vartan/serialmessages/master/example.js.png)
 ## Contributing
 
 1. Fork it!

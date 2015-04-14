@@ -4,7 +4,7 @@ var Q = require("q");
 
 // Open a new message handler
 var serialIdentifier = process.argv[2] || "/dev/tty.usbserial-A7027DGF";
-var messageHandler = require("messagehandler")(serialIdentifier);
+var messageHandler = require("serialmessages")(serialIdentifier);
 
 // echo all received characters back to command line
 messageHandler.serialPort.on("data", echo(messageHandler.serialPort));
