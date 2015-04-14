@@ -1,6 +1,6 @@
 {
   "name": "serialmessages",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Handles variable length messages over UART",
   "main": "serialmessages.js",
   "dependencies": {
