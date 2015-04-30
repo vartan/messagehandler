@@ -155,10 +155,10 @@ module.exports = function(serialFile, serialSettings) {
   }
 
   serialSettings = serialSettings || {
-    baudRate: 9600,
-    parser: variableLengthMessageParser
+    baudRate: 9600
   };
-  
+  serialSettings.parser = variableLengthMessageParser;
+
   serialPort = new serialport.SerialPort(serialFile, serialSettings, false); 
 
   // Automatically open serial port
